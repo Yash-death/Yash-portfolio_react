@@ -5,7 +5,7 @@ import { HeroSection } from "../components/HeroSection"
 import { Navbar } from "../components/NavBar"
 import { ProjectSection } from "../components/ProjectsSection"
 import { SkillSection } from "../components/SkillSection"
-import { StarBackGround } from "@/components/StarBackground"
+import { StarBackGround } from "@/components/StarBackGround"
 import { ThemeToggle } from "../components/ThemeToggle"
 
 export const Home = () =>{
