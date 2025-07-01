@@ -1,30 +1,59 @@
 import { Github, Instagram, Linkedin, Mail, MapPin, Phone, Send } from "lucide-react"
 import { cn } from "../lib/utils"
 import { useToast } from "../hooks/use-toast"
-import { useState } from "react";
+import { useState , useRef } from "react";
+import emailjs from '@emailjs/browser'
 
 export const ContactSection = () => {
 
     const {toast} = useToast();
     const [isSubmitting , setIsSubmitting] = useState(false);
+    const form = useRef();
 
-    const handleSubmit = (e) =>{
+    const handleSubmit = (e) => {
+  e.preventDefault();
+  setIsSubmitting(true);
 
-        
+  emailjs
+    .sendForm("service_b3ldfwc", "template_rnidah9", form.current, {
+      publicKey: "PUczy9NP1sNJVP52n",
+    })
+    .then(
+      () => {
+        toast({
+          title: "Message sent!",
+          description: "Thank you for your message. I'll get back to you soon.",
+        });
+        form.current.reset(); // reset form after success
+        setIsSubmitting(false);
+      },
+      (error) => {
+        toast({
+          title: "Failed to send",
+          description: "Something went wrong. Please try again later.",
+          variant: "destructive",
+        });
+        console.error("FAILED...", error.text);
+        setIsSubmitting(false);
+      }
+    );
+};
 
-        e.preventDefault();
+//     e.preventDefault();
 
-        setIsSubmitting(true);
-
-        setTimeout(()=>{
-           toast({
-            title:"Message sent!",
-            description:"Thank you for your message. I'll get back to you soon.",
-           })
-        },1500)
-
-        setIsSubmitting(false)
-    }
+//     emailjs
+//       .sendForm("service_b3ldfwc","template_rnidah9", form.current, {
+//         publicKey: "PUczy9NP1sNJVP52n",
+//       })
+//       .then(
+//         () => {
+//           console.log('SUCCESS!');
+//         },
+//         (error) => {
+//           console.log('FAILED...', error.text);
+//         },
+//       );
+//   };
     return(
         <>
         <section id="contact" className="py-24 px-4 relative bg-secondary/30">
@@ -96,7 +125,7 @@ export const ContactSection = () => {
             </div>
                 <div className="bg-card p-8 rounded-lg shadow-xs" onSubmit={handleSubmit}>
                     <h3 className="text-2xl font-semibold mb-6"> Send a Message</h3>
-                    <form className="space-y-6">
+                    <form className="space-y-6" ref={form} >
                         <div>
                             <label htmlFor="name" className="block text-sm font-medium mb-2">Your Name</label>
                             <input
@@ -104,7 +133,7 @@ export const ContactSection = () => {
                             id="name"
                             name="name"
                             required
-                            className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden foucs:ring-2 focus:ring-primary"
+                            className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary"
                             placeholder=" Enter Name...."
                             />
                         </div>
@@ -115,7 +144,7 @@ export const ContactSection = () => {
                             id="email"
                             name="email"
                             required
-                            className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden foucs:ring-2 focus:ring-primary"
+                            className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary"
                             placeholder=" Enter Mail...."
                             />
                         </div>
@@ -125,7 +154,7 @@ export const ContactSection = () => {
                             id="message"
                             name="message"
                             required
-                            className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden foucs:ring-2 focus:ring-primary resize-none"
+                            className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary resize-none"
                             placeholder="Hello, I'd like to talk about ...."
                             />
                         </div>
